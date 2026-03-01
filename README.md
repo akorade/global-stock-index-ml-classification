@@ -11,7 +11,7 @@
 
 # Overview 
 
-This project seeks to develop a model that provides predictions on whether the closing price of the NYA will increase or decrease on the next trading day, based on the opening price, highest price, lowest price, adjusted close price, and trading volume from the previous trading day. 
+This project seeks to develop a model that provides predictions on whether the closing price of the NYA will increase or decrease on the next trading day, based on the highest price, lowest price, adjusted close price, and trading volume from previous trading days. 
 
 # Team Members / Roles and Responsibilities (Week 1)
 - Mahima Chhagani - Select, Train, and Evaluate Model Performance
@@ -38,23 +38,24 @@ Business Proposition:  The team believes that a model that performs reasonably w
 
 # Details of Dataset 
 
-The dataset that the team is using contains daily price data for indices tracking stock exchanges from around the world, including the United States, Canada, Germany, Japan, China, etc. The data is available on Kaggle and is sourced from Yahoo! Finance by the data owner. The team has elected to use the indexProcessed.csv file as it essentially contains the same data as the original indexData.csv file but with null values removed and an extra column for closing prices converted to USD (for the exchanges that do not trade in USD). 
+The dataset that the team is using contains daily price data for indices tracking stock exchanges from around the world, including the United States, Canada, Germany, Japan, China, etc. The data is available on Kaggle and is sourced from Yahoo! Finance by the data owner. The team has elected to use the indexProcessed.csv file as it contains the same data as the original indexData.csv file but with null values removed and an extra column for closing prices converted to USD (for the exchanges that do not trade in USD). 
 
-The indexProcessed.csv dataset contains 1 target variable (i.e., opening day price for the next trading day) and 8 feature variables (index name, date, highiest price, lowest price, closing price, adjusted closing price, trading volumne, and in USD).
+The indexProcessed.csv dataset contains 1 target variable (i.e., closing price for the next trading day) and 5 feature variables for previous trading days (highiest price, lowest price, closing price, adjusted closing price, trading volumne).
 
 After discussions, the team made certain preliminary decisions regarding data cleaning (based on what we know at Week 1): 
-- The team will focus solely on the index prices for the NYSE Composite Index (NYA). The reason for this is that different stock exchanges have different seasonal trading patterns and use different weighting methodologies which may skew the data and lead to overfitting. 
-- The team will remove data entries where the trading volume is 0 or where the opening price, high, low, and closing price are the same for that trading day. These entries seem to suggest that there were no trading activities happening on those particular days and hence may be unreliable for purposes of the model.  
+- The team will focus solely on the index prices for the NYSE Composite Index (NYA). The reason for this is that incorporating information from other indexes in prediction of the target index would likely introduce more noise than signal without proper methodology. This may skew the data and lead to overfitting. 
+- The team will remove data entries where the trading volume is 0 or where the opening price, high, low, and closing price are the same for that trading day. These entries seem to suggest that there were no trading activities happening on those particular days and hence may be unreliable for purposes of the model. Records with high and low prices being equal appear to be more common in earlier years, suggesting less precise collection methodologies at those times. In recent years, NYA appears to be more reliable from this perspective than other indexes in the dataset.  
 - The team will use NYA stock exchange data from 2004-2021, which is expected to yield around 4300 data entries and should serve as a pretty good starting point for training and testing the model.  
 
 # Potential Risks and Uncertainties 
 
 (Team members to add additional points)
 
-- Market prices are influenced by external factors such as economic conditions, human sentiiments, and new events, which will not be considered by the model when predicting outcome. 
+- Market prices are influenced by external factors such as economic conditions, human sentiiments, and new events, which may not be adequately considered by the model when predicting outcome. 
 - Even though the model may predict a decrease in the NYA index price the next day, the fund may benefit from holding the future position longer (instead of selling the position right away), if the overall expectation is for the index prices to go up in the near term (to avoid the cost of buying another futures contract).     
 - Risk with ARIMAX Model - prices are often influenced by non-linear factors as referenced in point 1 above and the ARIMAX model uses linear assumptions. 
-- Risk with Convolutional Neural Network Model - overfitting on noisy, non-stationary data. 
+- Risk with Convolutional Neural Network Model - overfitting on noisy, non-stationary data.
+- It is necessary to smooth noisy time series, such as with a rolling window averaging technique, to reduce the noise learned by the model. However, the model is evaluated against noisy observations. 
 
 # Methodology and Technology  
 
@@ -62,15 +63,16 @@ After discussions, the team made certain preliminary decisions regarding data cl
 
 (Team members to add additional points)
 
-1. **Data Cleaning and Preprocessing**: Process of fixing or removing duplicate, incomplete/missing data within a dataset, as well as addressing outliers, and normalizing/scaling data. 
+1. **Data Cleaning and Preprocessing**: Process of fixing or removing duplicate, incomplete/missing data within a dataset, as well as smoothing, addressing outliers, and normalizing/scaling data. 
 
 2. **Exploratory Data Analysis (EDA)**: Analyzing datasets (including using visualization methods) to understand their characteristics, the relationships between features, and identifying any patterns/assumptions.
 
-3. **Feature Engineering and Selection**: Transforming raw data to create new informative features that aid/enhance the prediction accuracy of the model.  
+3. **Feature Engineering and Selection**: Transforming raw data to create new informative features that aid/enhance the prediction accuracy of the model. Several unaltered attributes in the dataset (e.g., opening price, closing price, high, and low) have high correlation with each other. If used as they are, this would impede the model from learning the effects of individual features on the target. Since opening price of trading day n must equal the closing price of trading day n-1, opening price should be dropped. High and low must be used to capture information on the index variance over the course of a day without recapturing the information provided by closing price. One option would be to redefine those features as proportions of the closing price.     
 
 4. **Select, Train, and Evaluate Model Performance**:
-    - Choose appropriate algorithms to train and test the processed data. Choose one to act as the baseline model. 
-    - Evaluate the models' performance using metrics such as accuracy, precision, reall, or RMSE. 
+    - Choose a baseline model. 
+    - Choose appropriate algorithms and hyperparameters to train and test the processed data. 
+    - Evaluate the models' performance using metrics such as log-loss, accuracy, precision, and recall. 
     - Compare the model(s) to the baseline model 
 
 ## Technology 
