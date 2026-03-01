@@ -1,4 +1,4 @@
-# Predicting Whether the Closing Price of NYSE Composite Index (NYA) will Increase or Decrease Based on Prior Day Metrics
+# Predicting Whether the Closing Price of NYSE Composite Index (NYA) will Increase or Decrease Based on Previous Days' Metrics
 ## Cohort: 8, Team: ML4
 
 # Contents
