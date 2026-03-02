@@ -14,7 +14,7 @@
 This project seeks to develop a model that provides predictions on whether the closing price of the NYA will increase or decrease on the next trading day, based on the highest price, lowest price, adjusted close price, and trading volume from previous trading days. 
 
 # Team Members / Roles and Responsibilities (Week 1)
-- Mahima Chhagani - Select, Train, and Evaluate Model Performance
+- Mahima Chhagani - Feature Engineering and Selection, Select, Train, and Evaluate Model Performance
 - Jonah Eisen - Feature Engineering and Selection, Select, Train, and Evaluate Model Performance
 - Ajinkya Korade - Exploratory Data Analysis, Select, Train, and Evaluate Model Performance
 - Michelle Lin -  Project/Readme File Updates, Select, Train, and Evaluate Model Performance
