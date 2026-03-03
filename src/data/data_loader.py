@@ -19,7 +19,7 @@ else:
     print(f"Warning: .env file not found at {dotenv_path}")
 
 PROCESSED_INDEX_DATA = os.getenv('PROCESSED')
-TARGET = 'Close'
+TARGET = 'Delta Close'
 
 class DataLoader:
     def __init__(self, processed_path=PROCESSED_INDEX_DATA,
@@ -30,6 +30,7 @@ class DataLoader:
         self.earliest_date = earliest_date
         self.test_size = test_size
         self.processed_index_df = None
+        self.prepared_df = None
         self.X = None
         self.y = None
         self.X_train = None
@@ -56,7 +57,7 @@ class DataLoader:
         return processed_index_df[processed_index_df['Date'] >= earliest_date]
     
     def filter_processed_data(self):
-        if not self.processed_index_df:
+        if self.processed_index_df is None:
             self.load_processed_data()
         filtered_df = DataLoader.filter_by_index(self.processed_index_df, self.index)
         filtered_df = DataLoader.filter_by_date(filtered_df, self.earliest_date)
@@ -76,38 +77,48 @@ class DataLoader:
         processed_index_df.dropna(inplace=True)
         return processed_index_df
     
-    def engineer_features(self, processed_index_df):
-        """perform feature engineering and assign result to self.X"""
-        #separate features from target
-        self.X = processed_index_df.drop(columns=[TARGET])
+    @staticmethod
+    def engineer_features(filtered_df):
+        """perform feature engineering and return result"""
         #high and low prices are highly correlated with the last closing price
         #instead use high and low values as proportions of last closing price
-        self.X['LowProportion'] = self.X['Low']/self.X['Last Close']
-        self.X['HighProportion'] = self.X['High']/self.X['Last Close']
-        self.X.drop(columns=['High', 'Low'], inplace=True)
+        filtered_df['LowProportion'] = filtered_df['Low']/filtered_df['Last Close']
+        filtered_df['HighProportion'] = filtered_df['High']/filtered_df['Last Close']
+        filtered_df.drop(columns=['High', 'Low'], inplace=True)
+        return filtered_df
     
-    def load_X_y(self):
-        """perform feature engineering and split data into features X and target y
-        assign results to self.X and self.y"""
-        filtered_df = self.filter_processed_data()
-        filtered_df = DataLoader.shift_closing(filtered_df)
-        #separate target series from features
-        self.y = filtered_df[TARGET]
+    def prepare_df(self):
+        """prepare Dataframe filtered to single index and from earliest date. Manipulate columns as 
+        stipulated by engineer_features. Create column for daily delta closing price."""
+        self.prepared_df = self.filter_processed_data()
+        self.prepared_df = DataLoader.shift_closing(self.prepared_df)
         #engineer features and assign to self.X
-        self.engineer_features(filtered_df)
+        self.prepared_df = self.engineer_features(self.prepared_df)
+        #create column for delta close, which will serve as target
+        self.prepared_df['Delta Close'] = self.prepared_df['Close'] - self.prepared_df['Last Close']
+    
+    def prepare_X(self):
+        if self.prepared_df is None:
+            self.prepare_df()
+        self.X = self.prepared_df.drop(columns=['Last Close', 'Close', TARGET])
+    
+    def prepare_y(self):
+        if self.prepared_df is None:
+            self.prepare_df()
+        #separate target series from features
+        self.y = self.prepared_df[TARGET]
     
     def train_test_split(self):
         """perform temporal train test split according to proportion in self.test_size"""
-
         #load X, y if not already loaded
-        if not self.X or not self.y:
-            self.load_X_y()
-        
-        train_index = int((1-self.test_size)*self.X.shape[0])
+        if self.X is None:
+            self.prepare_X()
+        if self.y is None:
+            self.prepare_y()
 
+        train_index = int((1-self.test_size)*self.X.shape[0])
         self.X_train = self.X.iloc[:train_index,:]
         self.X_test = self.X.iloc[train_index:,:]
-
         self.y_train = self.y[:train_index]
         self.y_test = self.y[train_index:]
 
