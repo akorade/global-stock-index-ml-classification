@@ -19,10 +19,11 @@ else:
     print(f"Warning: .env file not found at {dotenv_path}")
 
 PROCESSED_INDEX_DATA = os.getenv('PROCESSED')
+TARGET = 'Close'
 
 class DataLoader:
     def __init__(self, processed_path=PROCESSED_INDEX_DATA,
-            index='NYA', earliest_date=datetime.datetime(year=2004,month=1,day=1),
+            index='NYA', earliest_date=datetime.datetime(year=2003,month=1,day=9),
             test_size=0.2):
         self.processed_index_path = Path.joinpath(module_dir,processed_path)
         self.index = index
@@ -41,40 +42,61 @@ class DataLoader:
         assign result to self.processed_index_df
         """
         self.processed_index_df = pd.read_csv(self.processed_index_path, parse_dates=[1])
+
+    @staticmethod
+    def filter_by_index(processed_index_df, index):
+        """filter processed index data to only include rows for the stock index specified in self.index
+        assign result to self.processed_index_df"""
+        return processed_index_df[processed_index_df['Index'] == index]
     
-    def load_X_y(self):
-        """perform feature engineering and split data into features X and target y
-        assign results to self.X and self.y"""
-        #load processed index data if not already loaded
+    @staticmethod
+    def filter_by_date(processed_index_df, earliest_date):
+        """filter processed index data to only include rows from the date specified in self.earliest_date onwards
+        assign result to self.processed_index_df"""
+        return processed_index_df[processed_index_df['Date'] >= earliest_date]
+    
+    def filter_processed_data(self):
         if not self.processed_index_df:
             self.load_processed_data()
-        #filter down to only specified stock index
-        index_mask = self.processed_index_df['Index'] == self.index
-        #if an earliest date was specified, take only from that date onwards
-        if self.earliest_date:
-            date_mask = self.processed_index_df['Date'] >= self.earliest_date
-        one_index_df = (self.processed_index_df[index_mask & date_mask]
-            .set_index('Date').drop(columns=['Index', 'CloseUSD']))
-        
+        filtered_df = DataLoader.filter_by_index(self.processed_index_df, self.index)
+        filtered_df = DataLoader.filter_by_date(filtered_df, self.earliest_date)
+    
+        filtered_df = filtered_df.set_index('Date')
+        filtered_df.drop(columns=['Index', 'CloseUSD'], inplace=True)
+        return filtered_df
+
+    @staticmethod
+    def shift_closing(processed_index_df):
         #opening price of day n is closing price of day n-1
-        one_index_df.rename(columns={'Open':'Last Close', 'Adj Close': 'Last Adj Close'},inplace=True)
+        processed_index_df.rename(columns={'Open':'Last Close', 'Adj Close': 'Last Adj Close'},inplace=True)
         #align target (next day's close) with predictors
-        one_index_df['Close'] = one_index_df['Close'].shift(-1)
+        processed_index_df['Close'] = processed_index_df['Close'].shift(-1)
         #align last adjust closing price with last closing price
-        one_index_df['Last Adj Close'] = one_index_df['Last Adj Close'].shift(1)
-        one_index_df.dropna(inplace=True)
-
-        #separate target series from features
-        target = 'Close'
-        self.y = one_index_df[target]
-
+        processed_index_df['Last Adj Close'] = processed_index_df['Last Adj Close'].shift(1)
+        processed_index_df.dropna(inplace=True)
+        return processed_index_df
+    
+    def engineer_features(self, processed_index_df):
+        """perform feature engineering and assign result to self.X"""
         #separate features from target
-        self.X = one_index_df.drop(columns=[target])
+        self.X = processed_index_df.drop(columns=[TARGET])
         #high and low prices are highly correlated with the last closing price
         #instead use high and low values as proportions of last closing price
         self.X['LowProportion'] = self.X['Low']/self.X['Last Close']
         self.X['HighProportion'] = self.X['High']/self.X['Last Close']
         self.X.drop(columns=['High', 'Low'], inplace=True)
+    
+    def load_X_y(self):
+        """perform feature engineering and split data into features X and target y
+        assign results to self.X and self.y"""
+        
+        filtered_df = self.filter_processed_data()
+        filtered_df = DataLoader.shift_closing(filtered_df)
+
+        #separate target series from features
+        self.y = filtered_df[TARGET]
+
+        self.engineer_features(filtered_df)
     
     def train_test_split(self):
         """perform temporal train test split according to proportion in self.test_size"""
