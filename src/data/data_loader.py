@@ -89,13 +89,11 @@ class DataLoader:
     def load_X_y(self):
         """perform feature engineering and split data into features X and target y
         assign results to self.X and self.y"""
-        
         filtered_df = self.filter_processed_data()
         filtered_df = DataLoader.shift_closing(filtered_df)
-
         #separate target series from features
         self.y = filtered_df[TARGET]
-
+        #engineer features and assign to self.X
         self.engineer_features(filtered_df)
     
     def train_test_split(self):
