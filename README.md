@@ -51,11 +51,13 @@ After discussions, the team made certain preliminary decisions regarding data cl
 
 (Team members to add additional points)
 
-- Market prices are influenced by external factors such as economic conditions, human sentiiments, and new events, which may not be adequately considered by the model when predicting outcome. 
-- Even though the model may predict a decrease in the NYA index price the next day, the fund may benefit from holding the future position longer (instead of selling the position right away), if the overall expectation is for the index prices to go up in the near term (to avoid the cost of buying another futures contract).     
-- Risk with ARIMAX Model - prices are often influenced by non-linear factors as referenced in point 1 above and the ARIMAX model uses linear assumptions. 
-- Risk with Convolutional Neural Network Model - overfitting on noisy, non-stationary data.
-- It is necessary to smooth noisy time series, such as with a rolling window averaging technique, to reduce the noise learned by the model. However, the model is evaluated against noisy observations. 
+- If the theory that markets are inefficient is adopted, then market prices are not a perfect reflection of their value. External factors such as economic conditions, human sentiments, and new events may result in stocks being either undervalued or overvalued. If these external factors are not adequately captured by the model, the index may move in a direction contrary to the prediction. However, market inefficiency is also the phenomenon that presents an opportunity to profit through technical analysis. 
+- Even though the model may predict a decrease in the NYA index price the next day, the fund may benefit from holding the future position longer (instead of selling the position right away), if the overall expectation is for the index prices to go up in the near term (to avoid the cost of buying another futures contract). A strategy that predicts values further in the future may yield better results.
+- It is necessary to smooth noisy time series, such as with a rolling window averaging technique, to reduce the noise learned by the model. However, the model is evaluated against noisy observations. A strategy that predicts values further in the future may allow the trend in the data to overcome the noisy observations.
+- The time series may not be stationary. That is, its mean and variance may not be constant in time and there may not exist weights that fit the whole series. A time series can often be proxied by a time series derived from the n'th difference, for some n > 0, that is closer to stationary. The Augmented Dickey-Fuller test can be performed to assess the stationarity of the resulting time series. Once the proxy is used to train the model and a prediction is made, the original value can be recovered. In the ARIMAX model, the I stands for Integrated and refers to differencing.          
+- Risk with ARIMAX Model - the ARIMAX model assumes that future outcomes are linear functions of past observations and errors, which may be too simple to capture the complexity of market dynamics. While this may result in higher model bias, the simplicity may yield a lower variance than would a more complex model.
+- Risk with Convolutional Neural Network Model - the flexibility of CNNs makes them vulnerable to overfitting, resulting in a high variance. However, the flexibility reduces the bias. 
+ 
 
 # Methodology and Technology  
 
