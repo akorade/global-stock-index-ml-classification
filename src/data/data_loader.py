@@ -108,6 +108,21 @@ class DataLoader:
         #separate target series from features
         self.y = self.prepared_df[TARGET]
     
+    @staticmethod
+    def time_split_2D(data, test_size=0.2):
+        cut_index = int((1-test_size)*data.shape[0])
+        train_data = data.iloc[:cut_index,:]
+        test_data = data.iloc[cut_index:,:]
+        return train_data, test_data
+    
+    @staticmethod
+    def time_split_1D(data, test_size=0.2):
+        cut_index = int((1-test_size)*len(data))
+        train_data = data[:cut_index]
+        test_data = data[cut_index:]
+        return train_data, test_data
+
+    
     def train_test_split(self):
         """perform temporal train test split according to proportion in self.test_size"""
         #load X, y if not already loaded
@@ -116,11 +131,13 @@ class DataLoader:
         if self.y is None:
             self.prepare_y()
 
-        train_index = int((1-self.test_size)*self.X.shape[0])
-        self.X_train = self.X.iloc[:train_index,:]
-        self.X_test = self.X.iloc[train_index:,:]
-        self.y_train = self.y[:train_index]
-        self.y_test = self.y[train_index:]
+        self.X_train, self.X_test = DataLoader.time_split_2D(self.X, self.test_size)
+        self.y_train, self.y_test = DataLoader.time_split_1D(self.y, self.test_size)
+    
+    @staticmethod
+    def quantize_delta_close(delta_close):
+        """return array of 0 if <= 0 and 1 if > 0"""
+        return pd.Series(data=[0 if y <= 0 else 1 for y in delta_close], index=delta_close.index)
 
         
 
