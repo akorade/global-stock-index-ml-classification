@@ -8,6 +8,7 @@
 - [Details of Dataset](#details-of-dataset)  
 - [Potential Risks and Uncertainties](#potential-risks-and-uncertainties)  
 - [Methodology and Technology](#methodology-and-technology)   
+- [Virtual Environment Setup](#virtual-environment-set-up)
 
 # Overview 
 
@@ -88,6 +89,46 @@ After discussions, the team made certain preliminary decisions regarding data cl
 - Keras
 - PyTorch
 
+# Virtual Environment Set Up 
+
+To ensure that the required packages are installed for the virtual environment, kindly run the following commands in terminal (macOS/Linux) or Git Bash (Windows):
+
+1. Clone the Git repository in the local directory where you want this repository to be stored: 
+
+    ```
+    git clone https://github.com/akorade/global-stock-index-ml-classification.git
+    ```
+
+2. In that local repository, create a virtual environment called `global-stock-env`:
+    ```
+    uv venv global-stock-env --python 3.11
+    ```
+
+2. Activate the environment:
+    - for macOS/Linux:
+        ```
+        source global-stock-env/bin/activate
+        ```
+        
+    - for windows (git bash):    
+        ```
+        source global-stock-env/Scripts/activate
+        ```
+
+3. Install all required packages from the [pyproject.toml](./pyproject.toml)
+    ```bash
+    uv sync --active
+    ```
+
+When the virtual environment is active (by running the command in step 2 above), your terminal prompt will change to show:  
+```
+(global-stock-env) $ or (global-stock-env) %
+``` 
+
+When you’re finished, you can deactivate the virtual environment with the following command:  
+```bash
+deactivate
+```
 ================================================================================================
 
 ## Week 1 Expectations (NTD: for guidance only, to remove at later date)
