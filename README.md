@@ -140,8 +140,6 @@ deactivate
 ## Summary of Findings 
 
 A summary of each model's performance is included below: 
-
-<div align="center">
  
 | Model | Accuracy | Precision | Recall | F1-Score|
  | --- | --- | --- | --- | --- |
