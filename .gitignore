@@ -1,2 +1,6 @@
-__pycache__/
+**/__pycache__/*
 *.pyc
+uv.lock
+global-stock-env
+.venv
+.vscode/
