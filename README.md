@@ -9,7 +9,7 @@
 - [Potential Risks and Uncertainties](#potential-risks-and-uncertainties)  
 - [Methodology and Technology](#methodology-and-technology)   
 - [Virtual Environment Setup](#virtual-environment-set-up)
-- [Conclusion and Recommendations](#conclusion-and-recommendation)
+- [Conclusion](#conclusion)
 - [Disclaimer](#️-disclaimer)
 - [Team Videos](#team-videos)
 
@@ -135,7 +135,24 @@ deactivate
 ```
 # Conclusion 
 
+ [To complete] 
 
+## Summary of Findings 
+
+A summary of each model's performance is included below: 
+
+<div align="center">
+ 
+| Model | Accuracy | Precision | Recall | F1-Score|
+ | --- | --- | --- | --- | --- |
+ | Baseline | 00.00| 00.00 | 00.00 | 00.00 |
+ | Random Forest | 00.00| 00.00 | 00.00 | 00.00 |
+
+## Main Takeaways:
+- 
+- 
+- 
+- 
 
 # ⚠️ Disclaimer
 
