@@ -3,11 +3,11 @@
 
 # Contents
 - [Overview](#overview)  
-- [Team Members / Roles and Responsibilities](#team-members--roles-and-responsibilities-week-1)
+- [Team Members / Roles and Responsibilities](#team-members--roles-and-responsibilities)
 - [Business Objective](#business-objective)  
 - [Details of Dataset](#details-of-dataset)  
 - [Potential Risks and Uncertainties](#potential-risks-and-uncertainties)  
-- [Methodology and Technology](#methodology-and-technology)   
+- [Methodology](#methodology)   
 - [Virtual Environment Setup](#virtual-environment-set-up)
 - [Conclusion](#conclusion)
 - [Disclaimer](#️-disclaimer)
@@ -15,9 +15,9 @@
 
 # Overview 
 
-This project seeks to develop a model that provides predictions on whether the closing price of the NYA will increase or decrease on the next trading day, based on the highest price, lowest price, adjusted close price, and trading volume from previous trading days. 
+This project seeks to develop a model that provides predictions on whether the closing price of the NYA will increase or decrease on the next trading day, based on metrics from the previous trading day. 
 
-# Team Members / Roles and Responsibilities (Week 1)
+# Team Members / Roles and Responsibilities
 - Mahima Chhagani - Feature Engineering and Selection, Select, Train, and Evaluate Model Performance
 - Jonah Eisen - Feature Engineering and Selection, Select, Train, and Evaluate Model Performance
 - Ajinkya Korade - Exploratory Data Analysis, Select, Train, and Evaluate Model Performance
@@ -36,9 +36,9 @@ What is a Futures Contract?
 - A futures contract is the obligation to buy or sell an underlying asset at a fixed delivery price on a fixed delivery date. While the underlying asset of a futures contract can be a physical entity, such as precious metals, it can alternatively be a stock index, such as the S&P 500 and Nasdaq‑100. 
 - A futures contract can be settled (1) by the buyer taking physical delivery of the asset or (2) via cash based on the difference between the contracted price and the final settlement price (either the buyer or seller will pay the difference depending on which party is in the money at the time). To reduce counterparty risk, futures contracts are "marked to market" daily, meaning the price differences are settled each day based on daily price fluctuations. 
 - Because futures contracts are marked to market daily, to ensure the solvency of the parties, a margin account is required to trade (typically representing 3-12% of the contract's notional value). It essentially allows an investor to control a large position with little capital, relatively speaking (the investor pays the value of the futures contract + daily margin requirements instead of the value of the assets), which can significally amplify returns (or losses) due to high leverage.  
-- Example: An investor buys a future of Index A, currently trading at 10,000 points. The exchange packages the future with a contract multiplier of $50 times the value of the index, meaning a single contract is worth $500,000. If Index A increases to 10,100 points the following day, the seller owes the buyer (10,100-10,000)(contract multiplier) = (100)($50) = $5,000. However, if Index A decreases to 9,500 points, the buyer owes the seller (10,000-9,500)(contract multiplier) = (500)($50) = $25,000. If the buyer opened the position with a 5% margin, or (0.05)($500,000) = $25,000, an increase of Index A from 10,000 to 10,100 points corresponds to a new contract value of $505,000, a 1% increase. However, the $5,000 gain corresponds to a 20% increase relative to $25,000 actually invested (excluding the price of the future). The 5% margin creates a leverage of 1/0.05 = 20:1.
+- Example: An investor buys a future of Index A, currently trading at 10,000 points. The exchange packages the future with a contract multiplier of $50 times the value of the index, meaning a single contract is worth $500,000. If Index A increases to 10,100 points the following day, the seller owes the buyer (10,100-10,000)(contract multiplier) = (100)($50) = $5,000. However, if Index A decreases to 9,500 points, the buyer owes the seller (10,000-9,500)(contract multiplier) = (500)($50) = $25,000. If the buyer opened the position with a 5% margin, or (0.05)($500,000) = $25,000, an increase of Index A from 10,000 to 10,100 points corresponds to a new contract value of $505,000, a 1% increase. However, the $5,000 gain corresponds to a 20% increase relative to $25,000 actually invested (excluding the cost of entering into the futures which may be nominal compared to the margin requirements). The 5% margin creates a leverage of 1/0.05 = 20:1.
 
-Business Proposition:  The team believes that a model that performs reasonably well in predicting whether the price of the NYA will increase or decrease the next trading day may serve as a helpful tool for hedge managers that seek to profit from higher risk futures trading strategies by capitalizing on daily price fluctuations of the futures positions held by the funds that they manage, as well as to manage potential liquidity needs of such funds due to potential margin calls. 
+Business Proposition:  The team believes that a model that performs reasonably well in predicting whether the price of the NYA will increase or decrease the next trading day may serve as a helpful tool for hedge managers that seek to profit from higher risk futures trading strategies by capitalizing on daily price fluctuations of the futures positions held by their funds, as well as to manage potential liquidity needs of such funds due to potential margin calls. 
 
 # Details of Dataset 
 
@@ -46,29 +46,19 @@ The dataset that the team is using contains daily price data for indices trackin
 
 The indexProcessed.csv dataset contains 1 target variable (i.e., closing price for the next trading day) and 5 feature variables for previous trading days (highiest price, lowest price, closing price, adjusted closing price, trading volumne).
 
-After discussions, the team made certain preliminary decisions regarding data cleaning (based on what we know at Week 1): 
+After discussions, the team made certain preliminary decisions regarding data cleaning at week 1:  
 - The team will focus solely on the index prices for the NYSE Composite Index (NYA). The reason for this is that incorporating information from other indexes in prediction of the target index would likely introduce more noise than signal without proper methodology. This may skew the data and lead to overfitting. 
 - The team will remove data entries where the trading volume is 0 or where the opening price, high, low, and closing price are the same for that trading day. These entries seem to suggest that there were no trading activities happening on those particular days and hence may be unreliable for purposes of the model. Records with high and low prices being equal appear to be more common in earlier years, suggesting less precise collection methodologies at those times. In recent years, NYA appears to be more reliable from this perspective than other indexes in the dataset.  
-- The team will use NYA stock exchange data from 2004-2021, which is expected to yield around 4300 data entries and should serve as a pretty good starting point for training and testing the model.  
+- The team will use NYA stock exchange data from 2003-2021, which should yield sufficient data entries and serve as a pretty good starting point for training and testing the models.  
 
 # Potential Risks and Uncertainties 
-
-(Team members to add additional points)
 
 - If the theory that markets are inefficient is adopted, then market prices are not a perfect reflection of their value. External factors such as economic conditions, human sentiments, and new events may result in stocks being either undervalued or overvalued. If these external factors are not adequately captured by the model, the index may move in a direction contrary to the prediction. However, market inefficiency is also the phenomenon that presents an opportunity to profit through technical analysis. 
 - Even though the model may predict a decrease in the NYA index price the next day, the fund may benefit from holding the future position longer (instead of selling the position right away), if the overall expectation is for the index prices to go up in the near term (to avoid the cost of buying another futures contract). A strategy that predicts values further in the future may yield better results.
 - It is necessary to smooth noisy time series, such as with a rolling window averaging technique, to reduce the noise learned by the model. However, the model is evaluated against noisy observations. A strategy that predicts values further in the future may allow the trend in the data to overcome the noisy observations.
 - The time series may not be stationary. That is, its mean and variance may not be constant in time and there may not exist weights that fit the whole series. A time series can often be proxied by a time series derived from the n'th difference, for some n > 0, that is closer to stationary. The Augmented Dickey-Fuller test can be performed to assess the stationarity of the resulting time series. Once the proxy is used to train the model and a prediction is made, the original value can be recovered. In the ARIMAX model, the I stands for Integrated and refers to differencing.          
-- Risk with ARIMAX Model - the ARIMAX model assumes that future outcomes are linear functions of past observations and errors, which may be too simple to capture the complexity of market dynamics. While this may result in higher model bias, the simplicity may yield a lower variance than would a more complex model.
-- Risk with Convolutional Neural Network Model - the flexibility of CNNs makes them vulnerable to overfitting, resulting in a high variance. However, the flexibility reduces the bias. 
- 
-[Note: team to discuss risk section for model since we are no longer using ARIMAX or CNN]
 
-# Methodology and Technology  
-
-## Methodology
-
-(Team members to add additional points)
+# Methodology
 
 1. **Data Cleaning and Preprocessing**: Process of fixing or removing duplicate, incomplete/missing data within a dataset, as well as smoothing, addressing outliers, and normalizing/scaling data. 
 
@@ -81,17 +71,6 @@ After discussions, the team made certain preliminary decisions regarding data cl
     - Choose appropriate algorithms and hyperparameters to train and test the processed data. 
     - Evaluate the models' performance using metrics such as log-loss, accuracy, precision, and recall. 
     - Compare the model(s) to the baseline model 
-
-## Technology 
-
-(Team members to add additional points)
-
-- scikit-learn  
-- Pandas and NumPy
-- matplotlib
-- TensorFlow
-- Keras
-- PyTorch
 
 # Virtual Environment Set Up 
 
@@ -135,51 +114,30 @@ deactivate
 ```
 # Conclusion 
 
- [To complete] 
+## Summary of Findings / Main Takeaway 
 
-## Summary of Findings 
+Against the baseline model's benchmark accuracy of around 36.4%, each of the models shows significant improvement over the baseline's performance, with random forest having the best overall performance out of the four.  
 
-A summary of each model's performance is included below: 
- 
-| Model | Accuracy | Precision | Recall | F1-Score|
- | --- | --- | --- | --- | --- |
- | Baseline | 00.00| 00.00 | 00.00 | 00.00 |
- | Random Forest | 00.00| 00.00 | 00.00 | 00.00 |
+| Model |Train Accuracy | Validation/Test Accuracy | Train ROC-AUC | Validation/Test ROC-AUC |	Notes |
+ | --- | --- | --- | --- | --- | --- |
+ | Random Forest | 0.804 | 0.708 | 0.892 | 0.772 | High accuracy and ROC-AUC on train; slight overfitting; best overall performance |
+ | Logistic Regression |0.711 | 0.683 |0.784 | 0.743 | Moderate train/test metrics; consistent performance; less overfitting than RF |
+ | XGBClassifier | 0.639 | 0.488 | 0.730 | 0.498 | Low metrics; overfitting to large extent |
+ | LSTM | 0.546 | 0.564	| 0.537 |0.535 | Low metrics; underfitting; not capturing sequence patterns effectively | 
 
-## Main Takeaways:
-- 
-- 
-- 
-- 
+If the team had more time to work on the project, we would want to be able to:  
+- Train/test the NYA dataset using also the Convolutional Neural Network Model 
+- Train/test the models with data from other global stock exchange indices which are also available in the original source data 
+- Quantify the estimated profit/losses for each model, if a hypothetical hedge fund were adopt a trading strategy where the fund would buy futures whenever the model in question predicted an increase, and sell futures whenever the model in question predicted a decrease, over a set period of time. 
 
 # ⚠️ Disclaimer
 
 This repository is created for **educational purposes only**.  
 
-The information contained in this repository should not be construed as tax, legal, insurance, financial, or investment advice, or the recommendation of or an offer to sell, or the solicitation of an offer to buy or invest in any investment product, vehicle, service or instrument, or to adopt any investment strategy. 
+The information contained in this repository should **not** be construed as tax, legal, regulatory, insurance, financial, or investment advice, or the recommendation of or an offer to sell, or the solicitation of an offer to buy or invest in any investment product, vehicle, service or instrument, or to adopt any investment strategy. 
 
 # Team Videos 
 
 [To include after project presentation]
 ================================================================================================
 
-
-## Guiding Questions (General) (NTD: for guidance only, to remove at later date)
-
-1. Who is the intended audience for your project?
-2. What is the question you will answer with your analysis?
-3. What are the key variables and attributes in your dataset?
-4. Do you need to clean your data, and if so what is the best strategy?
-5. How can you explore the relationships between different variables?
-6. What types of patterns or trends are in your data?
-7. Are there any specific libraries or frameworks that are well-suited to your project requirements?
-
-## Machine Learning Guiding Questions (NTD: for guidance only, to remove at later date)
-1. What are the specific objectives and success criteria for your machine learning model?
-2. How can you select the most relevant features for training?
-3. Are there any missing values or outliers that need to be addressed through preprocessing?
-4. Which machine learning algorithms are suitable for the problem domain?
-5. What techniques are available to validate and tune the hyperparameters?
-6. How should the data be split into training, validation, and test sets?
-7. Are there any ethical implications or biases associated with the machine learning model?
-8. How can you document the machine learning pipeline and model architecture for future reference?
