@@ -4,20 +4,12 @@ import pandas as pd
 import datetime
 import os
 from dotenv import load_dotenv
-from src.data.time_series import get_ar_terms, get_lag_dict, crop_by_lags
+from data.time_series import get_ar_terms, get_lag_dict, crop_by_lags
 
 # Get the directory of the current module
 module_dir = Path(__file__).resolve().parent
 
-# Construct the path to the .env file
-dotenv_path = module_dir / '.env'
-
-# Load the .env file
-if dotenv_path.is_file():
-    load_dotenv(dotenv_path=dotenv_path)
-else:
-    # Handle the case where the .env file is not found
-    print(f"Warning: .env file not found at {dotenv_path}")
+load_dotenv()
 
 PROCESSED_INDEX_DATA = os.getenv('PROCESSED')
 TARGET = 'Delta Close'
@@ -150,6 +142,8 @@ class DataLoader:
 
         self.X_train, self.X_test = DataLoader.time_split_2D(self.X, self.test_size)
         self.y_train, self.y_test = DataLoader.time_split_1D(self.y, self.test_size)
+
+        return self.X_train, self.X_test, self.y_train, self.y_test
     
     @staticmethod
     def quantize_delta_close(delta_close):
