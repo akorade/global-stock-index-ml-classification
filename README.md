@@ -9,6 +9,9 @@
 - [Potential Risks and Uncertainties](#potential-risks-and-uncertainties)  
 - [Methodology and Technology](#methodology-and-technology)   
 - [Virtual Environment Setup](#virtual-environment-set-up)
+- [Conclusion](#conclusion)
+- [Disclaimer](#️-disclaimer)
+- [Team Videos](#team-videos)
 
 # Overview 
 
@@ -35,11 +38,11 @@ What is a Futures Contract?
 - Because futures contracts are marked to market daily, to ensure the solvency of the parties, a margin account is required to trade (typically representing 3-12% of the contract's notional value). It essentially allows an investor to control a large position with little capital, relatively speaking (the investor pays the value of the futures contract + daily margin requirements instead of the value of the assets), which can significally amplify returns (or losses) due to high leverage.  
 - Example: An investor buys a future of Index A, currently trading at 10,000 points. The exchange packages the future with a contract multiplier of $50 times the value of the index, meaning a single contract is worth $500,000. If Index A increases to 10,100 points the following day, the seller owes the buyer (10,100-10,000)(contract multiplier) = (100)($50) = $5,000. However, if Index A decreases to 9,500 points, the buyer owes the seller (10,000-9,500)(contract multiplier) = (500)($50) = $25,000. If the buyer opened the position with a 5% margin, or (0.05)($500,000) = $25,000, an increase of Index A from 10,000 to 10,100 points corresponds to a new contract value of $505,000, a 1% increase. However, the $5,000 gain corresponds to a 20% increase relative to $25,000 actually invested (excluding the price of the future). The 5% margin creates a leverage of 1/0.05 = 20:1.
 
-Business Proposition:  The team believes that a model that performs reasonably well in predicting whether the price of the NYA will increase or decrease the next trading day will benefit hedge managers that seek to profit from higher risk futures trading strategies by capitalizing on daily price fluctuations of the futures positions held by the funds that they manage, as well as to manage potential liquidity needs of such funds due to potential margin calls. 
+Business Proposition:  The team believes that a model that performs reasonably well in predicting whether the price of the NYA will increase or decrease the next trading day may serve as a helpful tool for hedge managers that seek to profit from higher risk futures trading strategies by capitalizing on daily price fluctuations of the futures positions held by the funds that they manage, as well as to manage potential liquidity needs of such funds due to potential margin calls. 
 
 # Details of Dataset 
 
-The dataset that the team is using contains daily price data for indices tracking stock exchanges from around the world, including the United States, Canada, Germany, Japan, China, etc. The data is available on Kaggle and is sourced from Yahoo! Finance by the data owner. The team has elected to use the indexProcessed.csv file as it contains the same data as the original indexData.csv file but with null values removed and an extra column for closing prices converted to USD (for the exchanges that do not trade in USD). 
+The dataset that the team is using contains daily price data for indices tracking stock exchanges from around the world, including the United States, Canada, Germany, Japan, China, etc. The data is available on [Kaggle] (https://www.kaggle.com/datasets/mattiuzc/stock-exchange-data?select=indexProcessed.csv) and is sourced from Yahoo! Finance by the data owner. The team has elected to use the indexProcessed.csv file as it contains the same data as the original indexData.csv file but with null values removed and an extra column for closing prices converted to USD (for the exchanges that do not trade in USD). 
 
 The indexProcessed.csv dataset contains 1 target variable (i.e., closing price for the next trading day) and 5 feature variables for previous trading days (highiest price, lowest price, closing price, adjusted closing price, trading volumne).
 
@@ -59,6 +62,7 @@ After discussions, the team made certain preliminary decisions regarding data cl
 - Risk with ARIMAX Model - the ARIMAX model assumes that future outcomes are linear functions of past observations and errors, which may be too simple to capture the complexity of market dynamics. While this may result in higher model bias, the simplicity may yield a lower variance than would a more complex model.
 - Risk with Convolutional Neural Network Model - the flexibility of CNNs makes them vulnerable to overfitting, resulting in a high variance. However, the flexibility reduces the bias. 
  
+[Note: team to discuss risk section for model since we are no longer using ARIMAX or CNN]
 
 # Methodology and Technology  
 
@@ -129,16 +133,36 @@ When you’re finished, you can deactivate the virtual environment with the foll
 ```bash
 deactivate
 ```
+# Conclusion 
+
+ [To complete] 
+
+## Summary of Findings 
+
+A summary of each model's performance is included below: 
+ 
+| Model | Accuracy | Precision | Recall | F1-Score|
+ | --- | --- | --- | --- | --- |
+ | Baseline | 00.00| 00.00 | 00.00 | 00.00 |
+ | Random Forest | 00.00| 00.00 | 00.00 | 00.00 |
+
+## Main Takeaways:
+- 
+- 
+- 
+- 
+
+# ⚠️ Disclaimer
+
+This repository is created for **educational purposes only**.  
+
+The information contained in this repository should not be construed as tax, legal, insurance, financial, or investment advice, or the recommendation of or an offer to sell, or the solicitation of an offer to buy or invest in any investment product, vehicle, service or instrument, or to adopt any investment strategy. 
+
+# Team Videos 
+
+[To include after project presentation]
 ================================================================================================
 
-## Week 1 Expectations (NTD: for guidance only, to remove at later date)
-
-1. The business motivation for your project.
-2. Which dataset you have chosen to use.
-3. Risks or unknowns that you have identified.
-4. How you
-will approach the analysis.
-5. Breakdown of roles/tasks assigned to each team member.
 
 ## Guiding Questions (General) (NTD: for guidance only, to remove at later date)
 
