@@ -15,12 +15,12 @@ MODEL_NAME = 'rf_model.pkl'
 def execute_trades(y_pred, delta_close):
     num_contracts = 0
     funds = 0
-    for i, y in enumerate(y_pred):
+    for i, y in enumerate(y_pred[:-1]):
         if y == 0:
             num_contracts -= 1
         else:
             num_contracts += 1
-        funds += num_contracts*CONTRACT_MULTIPLIER*delta_close[i]/MARGIN
+        funds += num_contracts*CONTRACT_MULTIPLIER*delta_close[i+1]/MARGIN
     return funds
 
 def rf_trade():
