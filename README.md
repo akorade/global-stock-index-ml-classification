@@ -64,7 +64,7 @@ After discussions, the team made certain preliminary decisions regarding data cl
 
 2. **Exploratory Data Analysis (EDA)**: Analyzing datasets (including using visualization methods) to understand their characteristics, the relationships between features, and identifying any patterns/assumptions. 
 
-3. **Feature Engineering and Selection**: Transforming raw data to create new informative features that aid/enhance the prediction accuracy of the model. Several unaltered attributes in the dataset (e.g., opening price, closing price, high, and low) have high correlation with each other. If used as they are, this would impede the model from learning the effects of individual features on the target. Since opening price of trading day n must equal the closing price of trading day n-1, opening price should be dropped. High and low must be used to capture information on the index variance over the course of a day without recapturing the information provided by closing price. One option would be to redefine those features as proportions of the closing price. Futhermore, the correlation between Adj Close and Close is very high with each other as well and to further address this, we have added more features like Daily Return or Volumne Return, mean avaerage of last 3 days adj closing. Also removing Volume as it very lightly correlated with target. Finally creating 3 classes to predict if tomorrow's closing price would be higher, lower or same based on comparing tomorrow's closing to today's closing. 
+3. **Feature Engineering and Selection**: Transforming raw data to create new informative features that aid/enhance the prediction accuracy of the model. Several unaltered attributes in the dataset (e.g., opening price, closing price, high, and low) have high correlation with each other. If used as they are, this would impede the model from learning the effects of individual features on the target. Since opening price of trading day n must equal the closing price of trading day n-1, opening price should be dropped. High and low must be used to capture information on the index variance over the course of a day without recapturing the information provided by closing price. One option would be to redefine those features as proportions of the closing price. Futhermore, the correlation between Adj Close and Close is very high with each other as well and thus removed Adj Close. We computed the PACF to determine which lags had the most direct impact on the value of the series at the current time. Finally creating 2 classes to predict if tomorrow's closing price would be higher and lower or same based on comparing tomorrow's closing to today's closing. 
 
 4. **Select, Train, and Evaluate Model Performance**:
     - Choose a baseline model. 
@@ -116,14 +116,14 @@ deactivate
 
 ## Summary of Findings / Main Takeaway 
 
-Against the baseline model's benchmark accuracy of around 36.4%, each of the models shows significant improvement over the baseline's performance, with random forest having the best overall performance out of the four.  
+Against the baseline model's benchmark accuracy of around 36.4%, each of the models below shows significant improvement over the baseline's performance, with random forest having the best overall validation/test ROC-AUC score and logistic regression having the best overall validation/test accuracy score, out of the four models trained/tested.  
 
 | Model |Train Accuracy | Validation/Test Accuracy | Train ROC-AUC | Validation/Test ROC-AUC |	Notes |
  | --- | --- | --- | --- | --- | --- |
- | Random Forest | 0.804 | 0.708 | 0.892 | 0.772 | High accuracy and ROC-AUC on train; slight overfitting; best overall performance |
+ | Random Forest | 0.752 | 0.678 | 0.838 | 0.751 | High accuracy and ROC-AUC on train; slight overfitting; best overall performance |
  | Logistic Regression |0.711 | 0.683 |0.784 | 0.743 | Moderate train/test metrics; consistent performance; less overfitting than RF |
- | XGBClassifier | 0.639 | 0.488 | 0.730 | 0.498 | Low metrics; overfitting to large extent |
- | LSTM | 0.546 | 0.564	| 0.537 |0.535 | Low metrics; underfitting; not capturing sequence patterns effectively | 
+ | XGBClassifier | 0.757 | 0.682 | 0.837 | 0.744 | Low metrics; overfitting to large extent |
+ | LSTM | 0.552 | 0.553	| 0.508 |0.499 | Low metrics; underfitting; not capturing sequence patterns effectively | 
 
 If the team had more time to work on the project, we would want to be able to:  
 - Train/test the NYA dataset using also the Convolutional Neural Network Model 
