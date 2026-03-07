@@ -130,6 +130,10 @@ If the team had more time to work on the project, we would want to be able to:
 - Train/test the models with data from other global stock exchange indices which are also available in the original source data 
 - Quantify the estimated profit/losses for each model, if a hypothetical hedge fund were adopt a trading strategy where the fund would buy futures whenever the model in question predicted an increase, and sell futures whenever the model in question predicted a decrease, over a set period of time. 
 
+Final High-Level Thoughts 
+- The training and testing results show promise. More explorations can be done to determine whether there are other machine learning models out there that will do a better job of addressing issues with noisy stock market data and non-stationarity.
+- Simulation of fund performance (if the hedge fund were to buy/sell futures contracts on NYA based on the models’ predictions) is needed to further validate business case, but the initial results seem promising and the strategy may be worthwhile with additional risk oversight measures built in.  
+
 # ⚠️ Disclaimer
 
 This repository is created for **educational purposes only**.  
