@@ -69,9 +69,10 @@ After discussions, the team made certain preliminary decisions regarding data cl
 4. **Select, Train, and Evaluate Model Performance**:
     - Choose a baseline model. 
     - Choose appropriate algorithms and hyperparameters to train and test the processed data. 
-    - Evaluate the models' performance using metrics such as log-loss, accuracy, precision, and recall. 
-    - For hyperparameter tuning, we used negative log loss (neg_log_loss) as our scoring strategy to ensure the model outputs well-calibrated probabilities.
-    - Compare the model(s) to the baseline model 
+    - Use negative log loss (neg_log_loss) for hyperparameter tuning to ensure well-calibrated probability outputs.
+    - Optimize models with the Adam optimizer for stable and efficient gradient descent.
+    - Evaluate performance using accuracy and ROC-AUC metrics.
+    - Compare the model(s) to the baseline model. 
 
 # Virtual Environment Set Up 
 
