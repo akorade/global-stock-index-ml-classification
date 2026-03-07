@@ -143,7 +143,7 @@ This repository is created for **educational purposes only**.
 The information contained in this repository should **not** be construed as tax, legal, regulatory, insurance, financial, or investment advice, or the recommendation of or an offer to sell, or the solicitation of an offer to buy or invest in any investment product, vehicle, service or instrument, or to adopt any investment strategy. 
 
 # Team Videos 
-
-[To include after project presentation]
-================================================================================================
-
+### Presentation link : https://www.canva.com/design/DAHDH4juCKE/jqD0mtn7BBtUAPmYzn92pw/view?utm_content=DAHDH4juCKE&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hc2c4eeca81 
+We have also uploaded the presentation in githib files (main branch)
+### Protfolio video link
+1. Mahima Chhagani: https://www.youtube.com/watch?v=1z-iGINInjc
