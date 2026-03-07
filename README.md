@@ -70,6 +70,7 @@ After discussions, the team made certain preliminary decisions regarding data cl
     - Choose a baseline model. 
     - Choose appropriate algorithms and hyperparameters to train and test the processed data. 
     - Evaluate the models' performance using metrics such as log-loss, accuracy, precision, and recall. 
+    - For hyperparameter tuning, we used negative log loss (neg_log_loss) as our scoring strategy to ensure the model outputs well-calibrated probabilities.
     - Compare the model(s) to the baseline model 
 
 # Virtual Environment Set Up 
