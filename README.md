@@ -56,20 +56,21 @@ After discussions, the team made certain preliminary decisions regarding data cl
 - If the theory that markets are inefficient is adopted, then market prices are not a perfect reflection of their value. External factors such as economic conditions, human sentiments, and new events may result in stocks being either undervalued or overvalued. If these external factors are not adequately captured by the model, the index may move in a direction contrary to the prediction. However, market inefficiency is also the phenomenon that presents an opportunity to profit through technical analysis. 
 - Even though the model may predict a decrease in the NYA index price the next day, the fund may benefit from holding the future position longer (instead of selling the position right away), if the overall expectation is for the index prices to go up in the near term (to avoid the cost of buying another futures contract). A strategy that predicts values further in the future may yield better results.
 - It is necessary to smooth noisy time series, such as with a rolling window averaging technique, to reduce the noise learned by the model. However, the model is evaluated against noisy observations. A strategy that predicts values further in the future may allow the trend in the data to overcome the noisy observations.
-- The time series may not be stationary. That is, its mean and variance may not be constant in time and there may not exist weights that fit the whole series. A time series can often be proxied by a time series derived from the n'th difference, for some n > 0, that is closer to stationary. The Augmented Dickey-Fuller test can be performed to assess the stationarity of the resulting time series. Once the proxy is used to train the model and a prediction is made, the original value can be recovered. In the ARIMAX model, the I stands for Integrated and refers to differencing.          
+- The time series may not be stationary. That is, its mean and variance may not be constant in time and there may not exist weights that fit the whole series. A time series can often be proxied by a time series derived from the n'th difference, for some n > 0, that is closer to stationary. The Augmented Dickey-Fuller test can be performed to assess the stationarity of the resulting time series. Once the proxy is used to train the model and a prediction is made, the original value can be recovered. 
 
 # Methodology
 
 1. **Data Cleaning and Preprocessing**: Process of fixing or removing duplicate, incomplete/missing data within a dataset, as well as smoothing, addressing outliers, and normalizing/scaling data. 
 
-2. **Exploratory Data Analysis (EDA)**: Analyzing datasets (including using visualization methods) to understand their characteristics, the relationships between features, and identifying any patterns/assumptions.
+2. **Exploratory Data Analysis (EDA)**: Analyzing datasets (including using visualization methods) to understand their characteristics, the relationships between features, and identifying any patterns/assumptions. 
 
-3. **Feature Engineering and Selection**: Transforming raw data to create new informative features that aid/enhance the prediction accuracy of the model. Several unaltered attributes in the dataset (e.g., opening price, closing price, high, and low) have high correlation with each other. If used as they are, this would impede the model from learning the effects of individual features on the target. Since opening price of trading day n must equal the closing price of trading day n-1, opening price should be dropped. High and low must be used to capture information on the index variance over the course of a day without recapturing the information provided by closing price. One option would be to redefine those features as proportions of the closing price.     
+3. **Feature Engineering and Selection**: Transforming raw data to create new informative features that aid/enhance the prediction accuracy of the model. Several unaltered attributes in the dataset (e.g., opening price, closing price, high, and low) have high correlation with each other. If used as they are, this would impede the model from learning the effects of individual features on the target. Since opening price of trading day n must equal the closing price of trading day n-1, opening price should be dropped. High and low must be used to capture information on the index variance over the course of a day without recapturing the information provided by closing price. One option would be to redefine those features as proportions of the closing price. Futhermore, the correlation between Adj Close and Close is very high with each other as well and thus removed Adj Close. We computed the PACF to determine which lags had the most direct impact on the value of the series at the current time. Finally creating 2 classes to predict if tomorrow's closing price would be higher and lower or same based on comparing tomorrow's closing to today's closing. 
 
 4. **Select, Train, and Evaluate Model Performance**:
     - Choose a baseline model. 
     - Choose appropriate algorithms and hyperparameters to train and test the processed data. 
     - Evaluate the models' performance using metrics such as log-loss, accuracy, precision, and recall. 
+    - For hyperparameter tuning, we used negative log loss (neg_log_loss) as our scoring strategy to ensure the model outputs well-calibrated probabilities.
     - Compare the model(s) to the baseline model 
 
 # Virtual Environment Set Up 
@@ -116,19 +117,23 @@ deactivate
 
 ## Summary of Findings / Main Takeaway 
 
-Against the baseline model's benchmark accuracy of around 36.4%, each of the models shows significant improvement over the baseline's performance, with random forest having the best overall performance out of the four.  
+Against the baseline model's benchmark accuracy of around 36.4%, each of the models below shows significant improvement over the baseline's performance, with random forest having the best overall validation/test ROC-AUC score and logistic regression having the best overall validation/test accuracy score, out of the four models trained/tested.  
 
 | Model |Train Accuracy | Validation/Test Accuracy | Train ROC-AUC | Validation/Test ROC-AUC |	Notes |
  | --- | --- | --- | --- | --- | --- |
- | Random Forest | 0.804 | 0.708 | 0.892 | 0.772 | High accuracy and ROC-AUC on train; slight overfitting; best overall performance |
+ | Random Forest | 0.752 | 0.678 | 0.838 | 0.751 | High accuracy and ROC-AUC on train; slight overfitting; best overall performance |
  | Logistic Regression |0.711 | 0.683 |0.784 | 0.743 | Moderate train/test metrics; consistent performance; less overfitting than RF |
- | XGBClassifier | 0.639 | 0.488 | 0.730 | 0.498 | Low metrics; overfitting to large extent |
- | LSTM | 0.546 | 0.564	| 0.537 |0.535 | Low metrics; underfitting; not capturing sequence patterns effectively | 
+ | XGBClassifier | 0.757 | 0.682 | 0.837 | 0.744 | Low metrics; overfitting to large extent |
+ | LSTM | 0.552 | 0.553	| 0.508 |0.499 | Low metrics; underfitting; not capturing sequence patterns effectively | 
 
 If the team had more time to work on the project, we would want to be able to:  
 - Train/test the NYA dataset using also the Convolutional Neural Network Model 
 - Train/test the models with data from other global stock exchange indices which are also available in the original source data 
 - Quantify the estimated profit/losses for each model, if a hypothetical hedge fund were adopt a trading strategy where the fund would buy futures whenever the model in question predicted an increase, and sell futures whenever the model in question predicted a decrease, over a set period of time. 
+
+Final High-Level Thoughts 
+- The training and testing results show promise. More explorations can be done to determine whether there are other machine learning models out there that will do a better job of addressing issues with noisy stock market data and non-stationarity.
+- Simulation of fund performance (if the hedge fund were to buy/sell futures contracts on NYA based on the models’ predictions) is needed to further validate business case, but the initial results seem promising and the strategy may be worthwhile with additional risk oversight measures built in.  
 
 # ⚠️ Disclaimer
 
